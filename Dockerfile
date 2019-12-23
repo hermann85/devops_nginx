@@ -2,7 +2,7 @@
 
 
 #Pull base image
-FROM dockerfile/debian
+FROM debian:latest
 
 #Install Nginx
 
