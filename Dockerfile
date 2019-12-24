@@ -2,19 +2,17 @@
 
 
 #Pull base image
-FROM debian:latest
+
+
+FROM debian
 
 #Install Nginx
 
+RUN apt-get update && apt-get install -y  software-properties-common
 
-RUN \
-  apt-get update apt-get install -y software-properties-common
-  add-apt-repository -y ppa:nginx/stable && \
-  apt-get update && \
-  apt-get install -y nginx && \
-  rm -rf /var/lib/apt/lists/* && \
-  echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
-  chown -R www-data:www-data /var/lib/nginx
+RUN apt-get install -y nginx openssh-server
+
+RUN /etc/init.d/ssh restart
 
 # Define mountable directories.
 VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx", "/var/www/html"]
@@ -22,8 +20,13 @@ VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/v
 # Define working directory.
 WORKDIR /etc/nginx
 
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
+
+STOPSIGNAL SIGTERM
+
 # Define default command.
-CMD ["nginx"]
+CMD /bin/sh -C /etc/init.d/ssh restart && nginx -g "daemon off;"
 
 # Expose ports.
 EXPOSE 80
