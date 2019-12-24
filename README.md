@@ -8,10 +8,10 @@
 
 ### Build the image
 
-    docker build -t nginx
+    docker build -t nginx .
 
 ### Run the contenair
 
-    docker run -p 80:80 nginx
+    docker run -p 8080:80 -p 222:22  nginx
 
 ### After few seconds, open `http://<host>` to see the welcome page.
