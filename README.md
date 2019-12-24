@@ -14,3 +14,4 @@
 
     docker run -p 80:80 nginx
 
+### After few seconds, open `http://<host>` to see the welcome page.
